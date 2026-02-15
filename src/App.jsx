@@ -551,7 +551,7 @@ function App() {
             <TradingViewWidget />
           </div>
 
-          {/* KOTAK 4: EDUKASI TEKNIKAL TRADING (DIPINDAH KE ATAS BROKER) */}
+          {/* KOTAK 4: EDUKASI TEKNIKAL TRADING */}
           <div className="technical-box">
             <div className="tv-header-simulated">
               <h2>
@@ -562,15 +562,16 @@ function App() {
               </div>
             </div>
             <div className="technical-content">
+              {/* GAMBAR SUDAH DIPERBARUI SESUAI REQUEST */}
               <img
-                src="https://i.pinimg.com/1200x/f0/65/80/f06580988bccc9552df84bc2b613fae1.jpg"
+                src="https://i.pinimg.com/1200x/da/bc/20/dabc20923094ec087782ea3cd7bb88c3.jpg"
                 alt="Cheat Sheet Candlestick"
                 className="technical-img"
               />
             </div>
           </div>
 
-          {/* KOTAK 5: REKOMENDASI BROKER (SEKARANG PALING BAWAH) */}
+          {/* KOTAK 5: REKOMENDASI BROKER (PALING BAWAH) */}
           <div className="broker-box">
             <div className="tv-header-simulated">
               <h2>
