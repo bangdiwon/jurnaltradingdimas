@@ -1,0 +1,535 @@
+/* Reset dasar */
+* {
+  box-sizing: border-box;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-image: url("/bg-trading.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  min-height: 100vh;
+  background-color: rgba(0, 0, 0, 0.75);
+  background-blend-mode: overlay;
+
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 50px 0 100px 0;
+}
+
+/* === BUNGKUSAN UTAMA === */
+.app-wrapper {
+  width: 980px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+/* === JUDUL === */
+.header-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 10px;
+}
+.header-title h1 {
+  font-size: 38px;
+  font-weight: 900;
+  letter-spacing: 2px;
+  color: #ffffff;
+  text-shadow: 2px 4px 10px rgba(0, 0, 0, 0.8);
+}
+.btn-logout {
+  background-color: #ef4444;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 16px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+/* === KOTAK BERSAMA (Tabel & Grafik) === */
+.container,
+.external-box {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 12px;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
+  overflow: hidden;
+  backdrop-filter: blur(8px);
+  display: flex;
+  flex-direction: column;
+}
+
+.external-box {
+  padding: 30px;
+}
+
+/* Navbar */
+.navbar {
+  display: flex;
+  background-color: #1e293b;
+}
+.navbar button {
+  flex: 1;
+  padding: 20px;
+  border: none;
+  background: none;
+  color: #cbd5e1;
+  font-size: 18px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+.navbar button:hover {
+  background-color: #334155;
+}
+.navbar button.active {
+  background-color: #3b82f6;
+  color: white;
+  font-weight: bold;
+}
+
+/* Isi Konten Tabel */
+.content {
+  padding: 40px;
+  flex: 1;
+}
+
+/* Dashboard Statistik Boks */
+.dashboard-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  margin-bottom: 30px;
+}
+.stat-card {
+  background: #f8fafc;
+  padding: 20px;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  text-align: center;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+.stat-card h3 {
+  font-size: 14px;
+  color: #64748b;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+.stat-card p {
+  font-size: 24px;
+  font-weight: 900;
+  color: #1e293b;
+}
+
+/* Filter Bulan */
+.filter-container {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-bottom: 25px;
+  gap: 15px;
+}
+.filter-container label {
+  font-weight: bold;
+  color: #475569;
+  font-size: 16px;
+}
+.filter-container select {
+  padding: 10px 15px;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  font-size: 16px;
+  outline: none;
+  background-color: #f8fafc;
+  cursor: pointer;
+  font-weight: 600;
+  color: #1e293b;
+}
+
+/* Tabel */
+.table-responsive {
+  width: 100%;
+  overflow: visible;
+  margin-bottom: 20px;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+th,
+td {
+  padding: 18px 15px;
+  text-align: left;
+  border-bottom: 1px solid #e2e8f0;
+  font-size: 16px;
+  vertical-align: middle;
+}
+th {
+  background-color: #f8fafc;
+  color: #475569;
+  white-space: nowrap;
+  font-weight: 700;
+  border-top: 1px solid #e2e8f0;
+}
+.td-catatan {
+  max-width: 400px;
+  line-height: 1.6;
+}
+.text-win {
+  color: #10b981;
+  font-weight: bold;
+}
+.text-loss {
+  color: #ef4444;
+  font-weight: bold;
+}
+.text-be {
+  color: #f59e0b;
+  font-weight: bold;
+}
+.text-center {
+  text-align: center;
+}
+.action-cell {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+.btn-edit,
+.btn-delete {
+  border: none;
+  padding: 8px 15px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 14px;
+}
+.btn-edit {
+  background-color: #f59e0b;
+  color: white;
+}
+.btn-delete {
+  background-color: #ef4444;
+  color: white;
+}
+.no-data-container {
+  text-align: center;
+  padding: 40px 0;
+}
+.no-data {
+  color: #94a3b8;
+  font-size: 18px;
+}
+
+/* === GRAFIK & TRADINGVIEW (DI LUAR TABEL) === */
+.section-title {
+  font-size: 22px;
+  font-weight: 800;
+  color: #1e293b;
+  margin-bottom: 25px;
+  border-left: 6px solid #3b82f6;
+  padding-left: 12px;
+}
+.chart-container {
+  background: #f8fafc;
+  padding: 30px 20px 20px 0;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  height: 400px;
+  box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.05);
+}
+.tv-widget-wrapper {
+  height: 600px;
+  width: 100%;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid #334155;
+  box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.05);
+  background-color: #131722;
+}
+
+/* === FORM ADMIN === */
+.login-container {
+  text-align: center;
+  max-width: 500px;
+  margin: 80px auto;
+}
+.login-container h2 {
+  font-size: 24px;
+  margin-bottom: 15px;
+}
+.login-container p {
+  color: #64748b;
+  margin-bottom: 25px;
+  font-size: 16px;
+}
+.form-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+  width: 100%;
+}
+.form-group label {
+  display: block;
+  margin-bottom: 10px;
+  font-weight: bold;
+  color: #334155;
+  font-size: 16px;
+}
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  padding: 15px;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  font-size: 16px;
+  outline: none;
+  background-color: #fff;
+}
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  border-color: #3b82f6;
+}
+.catatan-full {
+  grid-column: span 2;
+}
+.form-actions {
+  grid-column: span 2;
+  display: flex;
+  gap: 20px;
+  margin-top: 15px;
+}
+.btn-submit,
+.btn-cancel {
+  flex: 1;
+  padding: 15px;
+  border: none;
+  border-radius: 6px;
+  font-size: 18px;
+  cursor: pointer;
+  font-weight: bold;
+}
+.btn-submit {
+  background-color: #10b981;
+  color: white;
+}
+.btn-cancel {
+  background-color: #64748b;
+  color: white;
+}
+
+/* =========================================================
+   STYLE BARU: REKOMENDASI BROKER (TRADINGVIEW DARK THEME) 
+   ========================================================= */
+.broker-box {
+  background-color: #0b0e14; /* Warna sangat gelap khas background TV */
+  border-radius: 12px;
+  padding: 30px;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
+  border: 1px solid #2a2e39;
+}
+
+.tv-header-simulated h2 {
+  font-size: 26px;
+  font-weight: bold;
+  color: #ffffff;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+}
+
+.tv-header-simulated h2 span {
+  font-size: 20px;
+  margin-left: 8px;
+  color: #787b86; /* Warna panah abu-abu */
+}
+
+.tv-tabs {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 25px;
+  border-bottom: 1px solid #2a2e39;
+  padding-bottom: 15px;
+}
+
+.tv-tabs button {
+  background: transparent;
+  border: none;
+  color: #787b86;
+  font-size: 15px;
+  cursor: pointer;
+  font-weight: 600;
+  padding: 8px 16px;
+  border-radius: 20px; /* Bentuk pil oval */
+  transition: 0.2s;
+}
+
+.tv-tabs button:hover {
+  color: #d1d4dc;
+}
+
+.tv-tabs button.active {
+  background: #2a2e39;
+  color: #ffffff;
+}
+
+.broker-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.broker-card {
+  background: #1e222d; /* Warna card TradingView */
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid #2a2e39;
+  transition: transform 0.2s;
+}
+
+.broker-card:hover {
+  transform: translateY(-5px); /* Efek melayang saat di-hover */
+  border-color: #3b82f6;
+}
+
+.broker-img-wrapper {
+  position: relative;
+  height: 180px;
+  width: 100%;
+}
+
+.broker-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-bottom: 1px solid #2a2e39;
+}
+
+/* Logo kecil di pojok kiri atas gambar */
+.broker-logo-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: #2962ff; /* Biru TradingView */
+  color: white;
+  width: 28px;
+  height: 28px;
+  border-radius: 4px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.broker-content {
+  padding: 20px;
+}
+
+.broker-title {
+  color: #d1d4dc;
+  font-size: 17px;
+  font-weight: 700;
+  margin-bottom: 12px;
+  line-height: 1.4;
+}
+
+.broker-desc {
+  color: #787b86;
+  font-size: 14px;
+  line-height: 1.5;
+  margin-bottom: 25px;
+  /* Membuat teks terpotong rapi dengan titik-titik jika lebih dari 4 baris */
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.broker-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.broker-author {
+  color: #787b86;
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.broker-author span {
+  color: #d1d4dc;
+}
+
+.broker-actions-tv {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.tv-icon {
+  color: #787b86;
+  font-size: 14px;
+}
+
+.broker-btn {
+  background: #2a2e39;
+  color: #d1d4dc;
+  text-decoration: none;
+  border: 1px solid #434651;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  transition: 0.2s;
+}
+
+.broker-btn:hover {
+  background: #363a45;
+  color: #ffffff;
+}
+/* =========================================================
+   STYLE BARU: EDUKASI TEKNIKAL TRADING 
+   ========================================================= */
+.technical-box {
+  background-color: #0b0e14; /* Sesuai dengan tema dark broker-box */
+  border-radius: 12px;
+  padding: 30px;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
+  border: 1px solid #2a2e39;
+}
+
+.technical-content {
+  width: 100%;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid #2a2e39;
+  background-color: #1e222d;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+}
+
+.technical-img {
+  width: 100%;
+  height: auto;
+  border-radius: 4px;
+  display: block;
+}
