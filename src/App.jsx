@@ -9,6 +9,16 @@ import {
   ResponsiveContainer,
   Cell,
 } from "recharts";
+// === IMPORT FIREBASE DATABASE ===
+import {
+  collection,
+  getDocs,
+  addDoc,
+  updateDoc,
+  deleteDoc,
+  doc,
+} from "firebase/firestore";
+import { db } from "./firebase"; // Memanggil file firebase.js yang sudah kamu buat
 import "./App.css";
 
 // === DATA REKOMENDASI BROKER ===
@@ -87,10 +97,11 @@ const TradingViewWidget = () => {
 
 // === KOMPONEN UTAMA ===
 function App() {
-  const [jurnalData, setJurnalData] = useState(() => {
-    const dataTersimpan = localStorage.getItem("jurnalDimas");
-    return dataTersimpan ? JSON.parse(dataTersimpan) : [];
-  });
+  // STATE JURNAL KOSONG (Menunggu ditarik dari Firebase)
+  const [jurnalData, setJurnalData] = useState([]);
+
+  // Referensi ke koleksi "jurnal" di Firestore
+  const jurnalCollectionRef = collection(db, "jurnal");
 
   const [activeTab, setActiveTab] = useState("view");
   const [filterBulan, setFilterBulan] = useState("Semua");
@@ -105,9 +116,24 @@ function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [passwordInput, setPasswordInput] = useState("");
 
+  // === MENGAMBIL DATA DARI FIREBASE ===
   useEffect(() => {
-    localStorage.setItem("jurnalDimas", JSON.stringify(jurnalData));
-  }, [jurnalData]);
+    const getJurnal = async () => {
+      try {
+        const data = await getDocs(jurnalCollectionRef);
+        const firestoreData = data.docs.map((doc) => ({
+          ...doc.data(),
+          id: doc.id,
+        }));
+        // Urutkan berdasarkan tanggal
+        firestoreData.sort((a, b) => new Date(a.tanggal) - new Date(b.tanggal));
+        setJurnalData(firestoreData);
+      } catch (error) {
+        console.error("Gagal menarik data dari Firebase:", error);
+      }
+    };
+    getJurnal();
+  }, []);
 
   const resetForm = () => {
     setTanggal("");
@@ -134,32 +160,36 @@ function App() {
     resetForm();
   };
 
-  const handleSubmit = (e) => {
+  // === MENYIMPAN & MENGUPDATE DATA KE FIREBASE ===
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!isLoggedIn) return;
 
-    if (editId !== null) {
-      const updatedData = jurnalData.map((item) => {
-        if (item.id === editId)
-          return { ...item, tanggal, pair, hasil, nominal, catatan };
-        return item;
-      });
-      setJurnalData(updatedData);
-      alert("Data berhasil diperbarui!");
-    } else {
-      const entriBaru = {
-        id: new Date().getTime(),
-        tanggal,
-        pair,
-        hasil,
-        nominal,
-        catatan,
-      };
-      setJurnalData([...jurnalData, entriBaru]);
-      alert("Jurnal baru berhasil disimpan!");
+    const entriBaru = { tanggal, pair, hasil, nominal, catatan };
+
+    try {
+      if (editId !== null) {
+        // Update data lama di Firebase
+        const jurnalDoc = doc(db, "jurnal", editId);
+        await updateDoc(jurnalDoc, entriBaru);
+        setJurnalData(
+          jurnalData.map((item) =>
+            item.id === editId ? { ...item, ...entriBaru } : item,
+          ),
+        );
+        alert("Data di server berhasil diperbarui!");
+      } else {
+        // Tambah data baru ke Firebase
+        const docRef = await addDoc(jurnalCollectionRef, entriBaru);
+        setJurnalData([...jurnalData, { ...entriBaru, id: docRef.id }]);
+        alert("Jurnal baru sukses tersimpan di Cloud Database!");
+      }
+      resetForm();
+      setActiveTab("view");
+    } catch (error) {
+      console.error("Error simpan data:", error);
+      alert("Gagal menyimpan data ke server.");
     }
-    resetForm();
-    setActiveTab("view");
   };
 
   const handleEdit = (data) => {
@@ -172,9 +202,18 @@ function App() {
     setActiveTab("admin");
   };
 
-  const handleDelete = (id) => {
-    if (window.confirm("Yakin ingin menghapus jurnal ini?")) {
-      setJurnalData(jurnalData.filter((item) => item.id !== id));
+  // === MENGHAPUS DATA DARI FIREBASE ===
+  const handleDelete = async (id) => {
+    if (
+      window.confirm("Yakin ingin menghapus jurnal ini permanen dari server?")
+    ) {
+      try {
+        const jurnalDoc = doc(db, "jurnal", id);
+        await deleteDoc(jurnalDoc);
+        setJurnalData(jurnalData.filter((item) => item.id !== id));
+      } catch (error) {
+        console.error("Gagal menghapus:", error);
+      }
     }
   };
 
@@ -400,7 +439,7 @@ function App() {
               {!isLoggedIn ? (
                 <div className="login-container">
                   <h2>Login Admin</h2>
-                  <p>Masukkan password untuk menambah atau mengedit jurnal.</p>
+                  <p>Akses ke Database Cloud Server.</p>
                   <form
                     onSubmit={handleLogin}
                     className="form-group"
@@ -490,7 +529,7 @@ function App() {
                     </div>
                     <div className="form-actions">
                       <button type="submit" className="btn-submit">
-                        {editId ? "Update Jurnal" : "Simpan Jurnal"}
+                        {editId ? "Update Jurnal" : "Simpan ke Database"}
                       </button>
                       {editId && (
                         <button
