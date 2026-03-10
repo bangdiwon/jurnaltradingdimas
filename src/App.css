@@ -158,10 +158,15 @@ body {
 }
 
 /* Tabel */
+/* UPDATE: Pembatasan tinggi tabel dan scroll */
 .table-responsive {
   width: 100%;
-  overflow: visible;
+  max-height: 500px; /* Batas tinggi untuk memicu scroll */
+  overflow-y: auto; /* Scroll vertikal */
+  overflow-x: auto; /* Scroll horizontal jika layar sempit */
   margin-bottom: 20px;
+  border: 1px solid #e2e8f0; /* Tambahan border luar agar rapi */
+  border-radius: 6px;
 }
 table {
   width: 100%;
@@ -175,12 +180,17 @@ td {
   font-size: 16px;
   vertical-align: middle;
 }
-th {
-  background-color: #f8fafc;
+/* UPDATE: Header Sticky */
+.table-responsive thead th {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background-color: #f8fafc; /* Harus ada background agar data tertutup */
   color: #475569;
   white-space: nowrap;
   font-weight: 700;
-  border-top: 1px solid #e2e8f0;
+  border-top: none; /* Menghilangkan double border */
+  box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.1); /* Bayangan halus di bawah header */
 }
 .td-catatan {
   max-width: 400px;

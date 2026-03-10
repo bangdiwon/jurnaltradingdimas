@@ -104,7 +104,8 @@ function App() {
   const jurnalCollectionRef = collection(db, "jurnal");
 
   const [activeTab, setActiveTab] = useState("view");
-  const [filterBulan, setFilterBulan] = useState("Semua");
+  // Set default filterBulan menjadi string kosong agar bisa diisi otomatis nanti
+  const [filterBulan, setFilterBulan] = useState("");
 
   const [tanggal, setTanggal] = useState("");
   const [pair, setPair] = useState("XAU/USD");
@@ -128,6 +129,12 @@ function App() {
         // Urutkan berdasarkan tanggal
         firestoreData.sort((a, b) => new Date(a.tanggal) - new Date(b.tanggal));
         setJurnalData(firestoreData);
+
+        // Jika ada data, otomatis set filter ke bulan terbaru (data terakhir setelah diurutkan)
+        if (firestoreData.length > 0) {
+          const dataTerbaru = firestoreData[firestoreData.length - 1];
+          setFilterBulan(dataTerbaru.tanggal.substring(0, 7)); // Ambil YYYY-MM
+        }
       } catch (error) {
         console.error("Gagal menarik data dari Firebase:", error);
       }
@@ -146,7 +153,7 @@ function App() {
 
   const handleLogin = (e) => {
     e.preventDefault();
-    if (passwordInput === "dimas123") {
+    if (passwordInput === "Dimasadji123.") {
       setIsLoggedIn(true);
       setPasswordInput("");
     } else {
@@ -181,7 +188,11 @@ function App() {
       } else {
         // Tambah data baru ke Firebase
         const docRef = await addDoc(jurnalCollectionRef, entriBaru);
-        setJurnalData([...jurnalData, { ...entriBaru, id: docRef.id }]);
+        const newData = { ...entriBaru, id: docRef.id };
+        setJurnalData([...jurnalData, newData]);
+
+        // Update filter ke bulan data yang baru dimasukkan jika itu bulan yang baru
+        setFilterBulan(newData.tanggal.substring(0, 7));
         alert("Jurnal baru sukses tersimpan di Cloud Database!");
       }
       resetForm();
@@ -223,6 +234,7 @@ function App() {
   ]
     .sort()
     .reverse();
+
   const formatNamaBulan = (yyyymm) => {
     const [year, month] = yyyymm.split("-");
     const namaBulan = [
@@ -242,10 +254,10 @@ function App() {
     return `${namaBulan[parseInt(month, 10) - 1]} ${year}`;
   };
 
-  const dataTampil =
-    filterBulan === "Semua"
-      ? jurnalData
-      : jurnalData.filter((item) => item.tanggal.startsWith(filterBulan));
+  // Filter data HANYA berdasarkan bulan yang aktif (tidak ada lagi Semua Waktu)
+  const dataTampil = filterBulan
+    ? jurnalData.filter((item) => item.tanggal.startsWith(filterBulan))
+    : [];
 
   const totalTrades = dataTampil.length;
   const totalWin = dataTampil.filter((d) => d.hasil === "Win").length;
@@ -314,7 +326,7 @@ function App() {
                     value={filterBulan}
                     onChange={(e) => setFilterBulan(e.target.value)}
                   >
-                    <option value="Semua">Semua Waktu</option>
+                    {/* Hapus option "Semua Waktu" */}
                     {uniqueMonths.map((bulan) => (
                       <option key={bulan} value={bulan}>
                         {formatNamaBulan(bulan)}
